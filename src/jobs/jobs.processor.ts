@@ -61,8 +61,6 @@ export class JobsProcessor extends WorkerHost {
           ]);
           try {
             if (result.status === STATUS_TYPE.SUCCESS) return;
-            const start = new Date().toISOString();
-            //console.log(`Start: ${result.domain} @ ${start}`);
 
             const faviconUrl = await Promise.race([
               (async () => {
@@ -92,9 +90,6 @@ export class JobsProcessor extends WorkerHost {
             failed++;
             this.logger.error(`Error en ${result.domain}: ${result.error}`);
           }
-
-          const end = new Date().toISOString();
-          //console.log(`End: ${result.domain} @ ${end}`);
 
           const progress = Math.round((completed / total) * 100);
           await job.updateProgress(progress);

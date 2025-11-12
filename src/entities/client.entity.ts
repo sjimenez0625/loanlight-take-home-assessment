@@ -1,4 +1,10 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany, CreateDateColumn } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  OneToMany,
+  CreateDateColumn,
+} from 'typeorm';
 import { Job } from './job.entity';
 
 @Entity()
@@ -9,7 +15,7 @@ export class Client {
   @Column({ unique: true })
   clientId: string;
 
-  @OneToMany(() => Job, job => job.client)
+  @OneToMany(() => Job, (job) => job.client)
   jobs: Job[];
 
   @CreateDateColumn()

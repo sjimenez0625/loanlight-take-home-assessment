@@ -10,9 +10,15 @@ import { JobsModule } from './jobs/jobs.module';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({ isGlobal:true}),
-    TypeOrmModule.forRootAsync({inject: [ConfigService], useFactory:getDatabaseConfig}),
-    BullModule.forRootAsync({inject:[ConfigService], useFactory: getRedisConfig}),
+    ConfigModule.forRoot({ isGlobal: true }),
+    TypeOrmModule.forRootAsync({
+      inject: [ConfigService],
+      useFactory: getDatabaseConfig,
+    }),
+    BullModule.forRootAsync({
+      inject: [ConfigService],
+      useFactory: getRedisConfig,
+    }),
     JobsModule,
   ],
   controllers: [AppController],

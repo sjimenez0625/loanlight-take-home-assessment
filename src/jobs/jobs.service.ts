@@ -8,7 +8,7 @@ import { Job } from 'src/entities/job.entity';
 import { Result } from 'src/entities/result.entity';
 import { Repository } from 'typeorm';
 import { format } from 'fast-csv';
-import { PassThrough, Readable } from 'stream';
+import { PassThrough } from 'stream';
 
 @Injectable()
 export class JobsService {
@@ -32,8 +32,8 @@ export class JobsService {
 
     const job = this.jobRepo.create({
       client,
-       total: uniqueDomains.length,
-  results: uniqueDomains.map(d => ({ domain: d })),
+      total: uniqueDomains.length,
+      results: uniqueDomains.map((d) => ({ domain: d })),
     });
     await this.jobRepo.save(job);
 

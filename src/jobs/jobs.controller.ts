@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Param, Post, Query, StreamableFile } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  Query,
+  StreamableFile,
+} from '@nestjs/common';
 import { JobsService } from './jobs.service';
 import { CreateJobDto } from 'src/entities/dtos/create-job.dto';
 import { PaginationDto } from 'src/entities/dtos/pagination.dto';
@@ -30,9 +38,8 @@ export class JobsController {
     return this.service.getResult(jobId, page, per_page);
   }
 
-   @Get(':jobId/download')
+  @Get(':jobId/download')
   async downloadJob(@Param('jobId') jobId: string): Promise<StreamableFile> {
     return this.service.downloadJobCsv(jobId);
   }
-
 }
