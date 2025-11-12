@@ -149,4 +149,63 @@ Horizontal Scaling: Multiple worker instances can connect to the same Redis queu
 
 Monitoring: Integrate metrics Sentry for error tracking.
 
-Deployment: Containerize with Docker and scale via Kubernetes or AWS ECS/Fargate. Use RDS for PostgreSQL and ElastiCache for Redis in production.
+## AWS Deployment
+
+This application is deployment-ready for AWS using Terraform infrastructure-as-code. The deployment includes:
+
+### Infrastructure Components
+
+- **VPC**: Custom VPC with public and private subnets across multiple availability zones
+- **ECS Fargate**: Serverless container orchestration for running the application
+  - Auto-scaling based on CPU, memory, and request count (1-4 tasks)
+  - Deployment circuit breaker with automatic rollback
+  - Container Insights enabled for monitoring
+- **Application Load Balancer**: Distributes traffic across ECS tasks
+  - Health check endpoint: `/health`
+  - CloudWatch alarms for response time and errors
+- **RDS PostgreSQL 16.3**: Managed database service
+  - Encrypted at rest
+  - Automated backups with 7-day retention
+  - Multi-AZ support (configurable)
+  - CloudWatch alarms for CPU, storage, and connections
+- **ECR**: Private container registry for Docker images
+- **Secrets Manager**: Secure storage for database credentials
+- **CloudWatch**: Centralized logging and monitoring
+- **VPC Endpoints**: Private communication with AWS services (ECR, CloudWatch, S3)
+
+### Security Features
+
+- **Network Isolation**: Application runs in private subnets with no direct internet access
+- **NAT Gateway**: Secure outbound internet access for private resources
+- **Security Groups**: Strict inbound/outbound rules:
+  - ALB: Allows HTTP/HTTPS from internet
+  - ECS: Only accepts traffic from ALB
+  - RDS: Only accepts traffic from ECS tasks
+- **IAM Roles**: Least privilege access for ECS tasks
+- **Encryption**: Database encryption at rest, Secrets Manager for sensitive data
+
+### Deployment Process
+
+1. **Prerequisites**: AWS CLI, Terraform >= 1.0, Docker
+2. **Configure**: Update `terraform/terraform.tfvars` with your settings
+3. **Deploy Infrastructure**: Run `terraform apply` to create all AWS resources
+4. **Build & Push**: Build Docker image and push to ECR
+5. **Run Migrations**: Execute database migrations
+6. **Access**: Application available via ALB DNS
+
+For detailed deployment instructions, see `terraform/DEPLOYMENT.md`.
+
+### Monitoring & Observability
+
+- **CloudWatch Logs**: Application logs with 30-day retention
+- **CloudWatch Alarms**: Automated alerts for:
+  - ECS: CPU/memory utilization, task count
+  - ALB: Response time, unhealthy hosts, 5xx errors
+  - RDS: CPU, storage, connection count
+- **ECS Container Insights**: Detailed container metrics and performance data
+
+For infrastructure code and deployment automation, see the `terraform/` directory.
+
+---
+
+**Note**: For this project deployment, I used [Mau](https://www.mau.nestjs.com/) instead of manually running Terraform. Mau provides an automated deployment platform for NestJS applications that handles the same AWS infrastructure provisioning (ECS, RDS, Load Balancers, VPC, etc.) that the Terraform files would create, but with a simplified deployment experience for this test.
