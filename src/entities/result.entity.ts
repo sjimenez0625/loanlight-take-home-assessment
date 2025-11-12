@@ -1,7 +1,9 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, CreateDateColumn, UpdateDateColumn, Unique } from 'typeorm';
 import { Job } from './job.entity';
+import { STATUS_TYPE } from '../common/result.constant';
 
 @Entity()
+@Unique(['job', 'domain'])
 export class Result{
   @PrimaryGeneratedColumn('uuid')
   id: string;
@@ -15,8 +17,8 @@ export class Result{
   @Column({ nullable: true })
   faviconUrl: string;
 
-  @Column({ default: 'pending' })
-  status: 'pending' | 'success' | 'error';
+  @Column({type: 'enum', enum: STATUS_TYPE, default: STATUS_TYPE.PENDING })
+  status: STATUS_TYPE
 
   @Column({ nullable: true })
   error: string;

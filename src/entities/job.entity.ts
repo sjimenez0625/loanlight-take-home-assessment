@@ -1,6 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 import { Client } from './client.entity';
 import { Result } from './result.entity';
+import { STATUS_TYPE_JOB } from '../common/jobs.constant';
 
 @Entity()
 export class Job {
@@ -10,8 +11,8 @@ export class Job {
   @ManyToOne(() => Client, client => client.jobs, { onDelete: 'CASCADE' })
   client: Client;
 
-  @Column({ default: 'processing' })
-  status: 'processing' | 'completed' | 'failed';
+  @Column({type: 'enum', enum: STATUS_TYPE_JOB, default: STATUS_TYPE_JOB.PROCESSING })
+  status: STATUS_TYPE_JOB
 
   @Column({ default: 0 })
   total: number;

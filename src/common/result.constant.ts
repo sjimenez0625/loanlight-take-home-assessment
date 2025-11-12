@@ -1,0 +1,5 @@
+export enum STATUS_TYPE {
+  PENDING = 'PENDING',
+  SUCCESS = 'SUCCESS',
+  ERROR = 'ERROR',
+}
