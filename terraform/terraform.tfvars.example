@@ -1,0 +1,41 @@
+# Copy this file to terraform.tfvars and update with your values
+
+# AWS Configuration
+aws_region   = "us-east-1"
+project_name = "loanlight"
+environment  = "dev"
+
+# VPC Configuration
+vpc_cidr                 = "10.0.0.0/16"
+availability_zones_count = 2
+
+# ECS Configuration
+app_port         = 3000
+app_count        = 2
+fargate_cpu      = 512
+fargate_memory   = 1024
+health_check_path = "/health"
+
+# ECR Configuration
+ecr_repository_name = "loanlight-app"
+image_tag          = "latest"
+
+# RDS Configuration
+db_name                    = "loanlight"
+db_username                = "postgres"
+db_password                = "CHANGE_ME_SECURE_PASSWORD"
+db_instance_class          = "db.t3.micro"
+db_allocated_storage       = 20
+db_engine_version          = "16.3"
+db_backup_retention_period = 7
+db_multi_az                = false
+
+# Auto Scaling
+ecs_min_capacity    = 1
+ecs_max_capacity    = 4
+cpu_target_value    = 70
+memory_target_value = 80
+
+# Application Configuration
+node_env            = "production"
+log_retention_days  = 30
